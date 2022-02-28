@@ -1,10 +1,10 @@
 /**
  * Example Controller
  */
-
+const bcrypt = require('bcrypt');
 const debug = require('debug')
 const { matchedData, validationResult } = require('express-validator');
-const { User } = require('../models');
+//const { User } = require('../models');
 const models = require('../models');
 
 /**
@@ -50,14 +50,28 @@ const store = async (req, res) => {
 
 	// get only the validated data from the request
 	const validData = matchedData(req);
+	try{
+        validData.password = await bcrypt.hash(validData.password, 10);
+		console.log("here is the password",validData.password)
+
+     } catch(error){
+        return res.status(500).send({
+            status: 'error',
+            message: 'Exception thrown when hashing the password',
+        })
+     }
 
 	try {
-		const User = await new models.User(validData).save();
-		debug("Created new User successfully: %O", User);
+		
+		const user = await new models.User(validData).save();
+		debug("New user created: %O", user);
 
 		res.send({
 			status: 'success',
-			data: User,
+			"data": {
+				//Fix so that only "email", "first_name" and "last_name" are shown in the data object.
+					user
+			}
 		});
 
 	} catch (error) {
@@ -96,6 +110,7 @@ const update = async (req, res) => {
 
 	// get only the validated data from the request
 	const validData = matchedData(req);
+	
 
 	try {
 		const updatedUser = await user.save(validData);
