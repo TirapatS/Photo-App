@@ -1,3 +1,4 @@
+
 const express = require('express');
 const router = express.Router();
 
@@ -5,7 +6,10 @@ const router = express.Router();
 router.get('/', (req, res, next) => {
 	res.send({ success: true, data: { msg: 'oh, hi' }});
 });
-
-router.use('/example', require('./example'));
+/*
+router.use('/albums', require('./album'));
+router.use('/photos', require('./photo'));
+router.use('/register', require('./users'));
+*/
 
 module.exports = router;

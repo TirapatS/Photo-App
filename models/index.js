@@ -4,10 +4,9 @@ const knex = require('knex')({
 	client: 'mysql',
 	connection: {
 		host: process.env.DB_HOST || 'localhost',
-		port: process.env.DB_PORT || 3306,
-		charset: process.env.DB_CHARSET || 'utf8mb4',
-		database: process.env.DB_NAME || 'boilerplate',
-		user: process.env.DB_USER || 'boilerplate',
+		port: process.env.DB_PORT || 8889,
+		database: process.env.DB_NAME || 'photo_app',
+		user: process.env.DB_USER || 'root',
 		password: process.env.DB_PASSWORD || '',
 	}
 });
@@ -15,7 +14,9 @@ const knex = require('knex')({
 const bookshelf = require('bookshelf')(knex);
 
 const models = {};
-models.Example = require('./Example')(bookshelf);
+models.User = require('./User')(bookshelf);
+models.Album = require('./User')(bookshelf);
+models.Photo = require('./User')(bookshelf);
 
 module.exports = {
 	bookshelf,
