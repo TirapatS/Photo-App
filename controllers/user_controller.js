@@ -8,40 +8,11 @@ const { matchedData, validationResult } = require('express-validator');
 const models = require('../models');
 
 /**
- * Get all resources
- *
- * GET /
- */
-const index = async (req, res) => {
-	const User = await models.User.fetchAll();
-
-	res.send({
-		status: 'success',
-		data: User,
-	});
-}
-
-/**
- * Get a specific resource
- *
- * GET /:exampleId
- */
-const show = async (req, res) => {
-	const User = await new models.User({ id: req.params.User.id })
-		.fetch();
-
-	res.send({
-		status: 'success',
-		data: User,
-	});
-}
-
-/**
  * Store a new resource
  *
  * POST /
  */
-const store = async (req, res) => {
+const register = async (req, res) => {
 	// check for any validation errors
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
@@ -68,9 +39,8 @@ const store = async (req, res) => {
 
 		res.send({
 			status: 'success',
-			"data": {
-				//Fix so that only "email", "first_name" and "last_name" are shown in the data object.
-					user
+			data: {
+				user,
 			}
 		});
 
@@ -143,9 +113,7 @@ const destroy = (req, res) => {
 }
 
 module.exports = {
-	index,
-	show,
-	store,
+	register,
 	update,
 	destroy,
 }
