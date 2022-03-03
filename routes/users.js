@@ -2,12 +2,16 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/user_controller');
 const userValidationRules = require('../validation/user');
+const photoValidationRules = require('../validation/photo');
+const auth = require('../middlewares/auth')
 
-/* Get all resources */
-//router.get('/', userController.index);
 
-/* Get a specific resource */
-//router.get('/:userId', userController.show);
+
+/* Get user info */
+router.get('/', auth.basic, userController.getUser);
+
+/* Get authenticated photos */
+//router.get('/photos', auth.basic, userController.getPhotos);
 
 /* Register new users */
 router.post('/register', userValidationRules.createRules, userController.register);
@@ -17,5 +21,7 @@ router.post('/register', userValidationRules.createRules, userController.registe
 
 /* Destroy a specific resource */
 //router.delete('/:userId', userController.destroy);
+
+//router.post('/photos', auth.basic , photoValidationRules.createRules, userController.addPhoto);
 
 module.exports = router;
