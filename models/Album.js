@@ -6,7 +6,10 @@
 	return bookshelf.model('Album', {
 		tableName: 'albums',
         users() {
-            return this.belongsToMany('User')
+            return this.belongsTo('User')
+        },
+        photos() {
+            return this.hasMany('Photo')
         }
 	});
 };

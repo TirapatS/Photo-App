@@ -1,16 +1,14 @@
-/**
- * User model
- */
+
 
 module.exports = (bookshelf) => {
 	return bookshelf.model('User', {
 		tableName: 'users',
-		hidden: ['password','id'],	//	Hide password(test this code)
+		hidden: ['password','id'],	//	Hide password and id as it's uneccessary to show in res.
 		photos() {
-			return this.belongsToMany('Photo')
+			return this.hasMany('Photo')
 		},
-		album() {
-			return this.belongsToMany('Album')
+		albums() {
+			return this.hasMany('Album')
 		}
 	});
 };

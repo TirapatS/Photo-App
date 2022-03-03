@@ -45,11 +45,9 @@
      const decodedPayload = Buffer.from(base64Payload, 'base64').toString('ascii');
      // decodedPayload = "username:password"
  
-     // split decoded payload into "<username>:<password>"
-     const [username, password] = decodedPayload.split(':');
+     const [email, password] = decodedPayload.split(':');
  
-     // find user based on the username (bail if no such user exists)
-     const user = await new User({ username }).fetch({ require: false });
+     const user = await new User({ email }).fetch({ require: false });
      if (!user) {
          return res.status(401).send({
              status: 'fail',
