@@ -32,7 +32,6 @@ const register = async (req, res) => {
 	const validData = matchedData(req);
 	try{
         validData.password = await bcrypt.hash(validData.password, 10);
-		console.log("here is the password",validData.password)
 
      } catch(error){
         return res.status(500).send({

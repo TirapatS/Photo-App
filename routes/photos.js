@@ -10,6 +10,9 @@ const auth = require('../middlewares/auth');
 router.get('/', auth.basic, photoController.index);
 // GET /photos/photoId 
 router.get('/:photoId', auth.basic, photoController.show);
+
+router.get('/:photoId', photoController.show);
+
 // POST /photos
 router.post('/', photoValidationRules.createRules, photoController.store);
 // PUT /photos
