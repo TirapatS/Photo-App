@@ -49,7 +49,7 @@ const { User } = require('../models');
 					data: wantedPhoto
 				})
 			} else {
-				res.status(401).send({
+				res.status(403).send({
 					status: 'fail',
 					message: 'No such photo exists in your account'
 				})
@@ -79,20 +79,16 @@ const { User } = require('../models');
 	 }
  
 	 // get only the validated data from the request
-	 const validData = matchedData(req);
- 
-	 console.log("The validated data:", validData);
+	 const validData = matchedData(req);	
+	 const userId = req.user.id;
 
 	 try {
-		const result = await new models.Photo(validData).save();
-		console.log(result)
+		const result = await new models.Photo(validData).save(({user_id: userId}))
 		debug("New photo added: %O", result);
 
 		res.send({
 			status: 'success',
-			data: {
-				result: result,
-			},
+			data: result	
 		});
 
 	} catch (error) {
@@ -106,30 +102,33 @@ const { User } = require('../models');
  /**
   * Update a specific resource
   *
-  * POST /:bookId
  */
 }
  const update = async (req, res) => {
-	 const photoId = req.params.photoId;
- 
-	 const photo = await new models.Photo({ id: photoId }).fetch({ require: false });
+	
+	 const photo = await new models.Photo({ id: req.params.photoId }).fetch({ require: false });
+	
 	 if (!photo) {
-		 debug("Photo to update was not found. %o", { id: photoId });
+		 debug("Photo to update was not found. %o", { id: req.params.photoId });
 		 res.status(404).send({
 			 status: 'fail',
 			 data: 'Photo Not Found',
 		 });
 		 return;
-	 }
- 
-	 // check for any validation errors
-	 const errors = validationResult(req);
-	 if (!errors.isEmpty()) {
+
+	} else {
+		
+		if(req.user.id === photo.attributes.user_id) { // Check if wantedPhoto exists in the req.user's photo storage
+			 // check for any validation errors
+	 	const errors = validationResult(req);
+
+	 	if (!errors.isEmpty()) {
+
 		 return res.status(422).send({ status: 'fail', data: errors.array() });
-	 }
+	 	}
  
 	 // get only the validated data from the request
-	 const validData = matchedData(req);
+	 	const validData = matchedData(req);
  
 	 try {
 		 const updatedPhoto = await photo.save(validData);
@@ -147,9 +146,15 @@ const { User } = require('../models');
 				status: 'error',
 				message: 'Exception thrown in database when updating a photo.',
 			});
-			throw error;
 		}
+
+	} else {
+			res.status(404).send({ status: 'fail', message: 'Photo not found' });
+		}
+	}
+		
 }
+	
 
  
  module.exports = {

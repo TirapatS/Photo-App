@@ -11,7 +11,7 @@ router.get('/', (req, res, next) => {
 //router.use('/albums', require('./album'));
 
 router.use('/photos', auth.basic, require('./photos'));
-
-router.use('/user', require('./users'));
+router.use('/albums', auth.basic, require('./albums'));
+router.use('/users', require('./users'));
 
 module.exports = router;
