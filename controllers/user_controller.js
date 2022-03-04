@@ -107,71 +107,9 @@ const update = async (req, res) => {
 		throw error;
 	}
 }
-/*
-const getPhotos = async (req, res) => {	// Fix so authenticated user can get his/hers photos
-	console.log(req.user)
 
-	await req.user.load('photos')
-
-	res.status(200).send({
-		status: 'status',
-		data: {
-			photos: req.user.related('photos')
-		}
-	});
-}
-
-const addPhoto = async (req, res) => {
-	 // check for any validation errors
-	 const errors = validationResult(req);
-	 if (!errors.isEmpty()) {
-		 return res.status(422).send({ status: 'fail', data: errors.array() });
-	 }
- 
-	 // get only the validated data from the request
-	 const validData = matchedData(req);
- 
-	 console.log("The validated data:", validData);
-	
-	 // Create and add photo to the authenticated user
-	 try {
-		const photo = await new models.Photo(validData).save();
-		debug("Created and added new photo successfully: %O", photo);
-
-		res.send({
-			status: 'success',
-			data: {
-				photo,
-			},
-		});
- 
-	 } catch (error) {
-		 res.status(500).send({
-			 status: 'error',
-			 message: 'Failed adding photo to user',
-		 });
-		 throw error;
-	 }
-}
-	const getAlbums = async (req, res) => {
-		//const user = await new models.User({id : req.user.id}). fetch({withRelated: ['books']});
-	
-		// "lazy load" the books-relation
-		await req.user.load('albums')
-	
-		res.status(200).send({
-			status: 'status',
-			data: {
-				books: req.user.related('albums'),
-			}
-		});
-	}
-*/
 module.exports = {
 	getUser,
 	register,
 	update,
-	//getPhotos,
-	//addPhoto,
-	//getAlbums
 }
