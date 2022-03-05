@@ -14,9 +14,14 @@
     body('title').optional().isLength({ min: 3 }),
 
  ];
+
+ const addPhoto = [
+    body('photo_id').exists().isInt().withMessage('Type in the photos id to add to the album'),
+ ];
  
  module.exports = {
      createRules,
      updateRules,
+     addPhoto,
  }
  
