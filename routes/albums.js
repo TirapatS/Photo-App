@@ -1,21 +1,27 @@
 
 const express = require('express');
 const router = express.Router();
-const photoController = require('../controllers/photo_controller');
+const albumController = require('../controllers/album_controller.js');
+const albumValidationRules = require('../validation/album');
+const photoController = require('../controllers/photo_controller.js');
 const photoValidationRules = require('../validation/photo');
-const auth = require('../middlewares/auth');
-// FIX SOON
-/*
-// GET /photos
-router.get('/', auth.basic, photoController.index);
-// GET /photos/photoId 
-router.get('/:photoId', auth.basic, photoController.show);
 
-router.get('/:photoId', photoController.show);
 
-// POST /photos
-router.post('/', photoValidationRules.createRules, photoController.store);
-// PUT /photos
-router.put('/:photoId', photoValidationRules.updateRules, photoController.update);
-*/
+
+// GET /albums
+router.get('/',  albumController.index);
+
+// GET /albums/:albumId
+router.get('/:albumId',  albumController.show);
+
+// POST /albums
+router.post('/', albumValidationRules.createRules, albumController.store);
+
+// PUT /albums/albumId
+router.put('/:albumId', albumValidationRules.updateRules, albumController.update);
+
+// POST /albums/:albumId/photos
+router.post('/', albumValidationRules.createRules, photoValidationRules.createRules, albumController.store, photoController.store);
+
+
 module.exports = router;

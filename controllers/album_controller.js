@@ -12,55 +12,54 @@ const { User } = require('../models');
   *
   * GET /
   */
- const index = async (req, res) => {	// DONE 
+ const index = async (req, res) => {	
 	 try {
-		await req.user.load('photos')
+		await req.user.load('albums')
 		console.log("the User", req.user)
 		res.status(200).send({
 			status: 'status',
-			data: {
-				photos: req.user.related('photos')
-			}
+			data:
+				req.user.related('albums')
 		});
 
 	 } catch (error) {
-		res.status(422).send({ 
+		res.status(204).send({ 
 			status: 'fail',
-			message: 'You have no photos on your account'
+			message: 'You have no albums on your account'
 		});
 	 }
 	 
  }
  
- const show = async (req, res) => { // DONE
+ const show = async (req, res) => {
 
 	try {
-		const wantedPhoto = await new models.Photo({id: req.params.photoId}).fetch()	//	Fetch desired Photo and store it in "wantedPhoto" as an object
+		const wantedAlbum = await new models.Album({id: req.params.albumId}).fetch()	//	Fetch desired Album and store it in "wantedAlbum" as an object
 
-		if(!req.params.photoId) {	// Check if /:photoId even exists
-			res.status(422).send({
+		if(!req.params.albumId) {	
+			res.status(400).send({
 				status: 'fail',
-				message: 'Fill in the desired photo ID'
+				message: 'Fill in the desired album ID'
 			})
 		} else {
-			if(req.user.id === wantedPhoto.attributes.user_id) { // Check if wantedPhoto exists in the req.user's photo storage
+			if(req.user.id === wantedAlbum.attributes.user_id) { 
 				res.status(200).send({
 					status: 'success',
-					data: wantedPhoto
+					data: wantedAlbum
 				})
 			} else {
-				res.status(403).send({
+				res.status(404).send({
 					status: 'fail',
-					message: 'No such photo exists in your account'
+					message: 'No such Album exists in your account'
 				})
 			}
 		}
 		
 	}	
 	catch (error) {
-		res.status(401).send({ 
+		res.status(404).send({ 
 			status: 'fail',
-			message: 'Could not find requested photo'
+			message: 'Could not find requested album'
 		});
 	}
 
@@ -69,7 +68,7 @@ const { User } = require('../models');
  /**
   * Store a new resource
   *
-  * POST /
+  * POST /album
   */
  const store = async (req, res) => {
 	 // check for any validation errors
@@ -83,8 +82,8 @@ const { User } = require('../models');
 	 const userId = req.user.id;
 
 	 try {
-		const result = await new models.Photo(validData).save(({user_id: userId}))
-		debug("New photo added: %O", result);
+		const result = await new models.Album(validData).save(({user_id: userId}))
+		debug("New album added: %O", result);
 
 		res.send({
 			status: 'success',
@@ -92,9 +91,9 @@ const { User } = require('../models');
 		});
 
 	} catch (error) {
-		res.status(500).send({
+		res.status(400).send({
 			status: 'error',
-			message: 'Failed adding photo to user',
+			message: 'Failed adding album to user',
 		});
 	}
  
@@ -105,19 +104,20 @@ const { User } = require('../models');
 }
  const update = async (req, res) => {
 	
-	 const photo = await new models.Photo({ id: req.params.photoId }).fetch({ require: false });
+	 const album = await new models.Album({ id: req.params.albumId }).fetch({ require: false });
 	
-	 if (!photo) {
-		 debug("Photo to update was not found. %o", { id: req.params.photoId });
-		 res.status(404).send({
+	 if (!album) {
+		 debug("Album to update was not found. %o", { id: req.params.albumId });
+		 res.status(401).send({
 			 status: 'fail',
-			 data: 'Photo Not Found',
+			 data: 'Album Not Found',
 		 });
 		 return;
 
 	} else {
 		
-		if(req.user.id === photo.attributes.user_id) { // Check if wantedPhoto exists in the req.user's photo storage
+		if(req.user.id === album.attributes.user_id) { // Check if it exists in the req.user's account
+
 			 // check for any validation errors
 	 	const errors = validationResult(req);
 
@@ -130,20 +130,18 @@ const { User } = require('../models');
 	 	const validData = matchedData(req);
  
 	 try {
-		 const updatedPhoto = await photo.save(validData);
-		 debug("Updated photo successfully: %O", updatedPhoto);
+		 const updatedAlbum = await album.save(validData);
+		 debug("Updated photo successfully: %O", updatedAlbum);
  
 		 res.send({
 			 status: 'success',
-			 data: {
-				 photo,
-			 },
-		 });
+			 data: album
+             });
  
 		} catch (error) {
-			res.status(500).send({
+			res.status(400).send({
 				status: 'error',
-				message: 'Exception thrown in database when updating a photo.',
+				message: 'Exception thrown in database when updating a Album.',
 			});
 		}
 
