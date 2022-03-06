@@ -42,9 +42,9 @@ const updateRules = [
 			return Promise.reject("Email already exists");
 		}
 		return Promise.resolve();
-	}).isLength({ min: 6 }).withMessage('Email must be at least 6 characters and valid email'),
+	}).isLength({ min: 6 }),
 
-	body('password').exists().isLength({min:6}).withMessage('Password must be at least 6 characters'),
+	body('password').exists().isLength({min:6}).withMessage,
 
 	body('first_name').exists().isLength({min:2}),
 	
