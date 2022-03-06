@@ -2,7 +2,7 @@
 const knex = require('knex')({
 	debug: true,
 	client: 'mysql',
-	connection: {
+	connection: process.env.CLEARDB_DATABASE_URL || {
 		host: process.env.DB_HOST,
 		port: process.env.DB_PORT || 3306,
 		database: process.env.DB_NAME,
