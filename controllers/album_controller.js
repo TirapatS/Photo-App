@@ -146,7 +146,7 @@ const { User } = require('../models');
 		}
 
 	} else {
-			res.status(404).send({ status: 'fail', message: 'Photo not found' });
+			res.status(404).send({ status: 'fail', message: 'Album not found' });
 		}
 	}
 }
