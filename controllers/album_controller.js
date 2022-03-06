@@ -182,7 +182,7 @@ const { User } = require('../models');
                 } else {
                     res.status(404).send({
                         status: 'fail',
-                        message: 'Photo does not exist'
+                        message: 'Photo does not exists and cannot be added to your album'
                     })
                 }  
 
