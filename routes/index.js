@@ -5,7 +5,7 @@ const auth = require('../middlewares/auth');
 
 /* GET / */
 router.get('/', (req, res, next) => {
-	res.send({ status: 404, message: 'Not Found' });
+	res.send({ status: 200, message: 'Oh hello there, the connection was successful!' });
 });
 
 //router.use('/albums', require('./album'));
