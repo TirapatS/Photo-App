@@ -17,7 +17,7 @@ const { User } = require('../models');
 		await req.user.load('albums')
 		console.log("the User", req.user)
 		res.status(200).send({
-			status: 'status',
+			status: 'success',
 			data:
 				req.user.related('albums')
 		});
@@ -85,7 +85,7 @@ const { User } = require('../models');
 		const result = await new models.Album(validData).save(({user_id: userId}))
 		debug("New album added: %O", result);
 
-		res.send({
+		res.status(200).send({
 			status: 'success',
 			data: result	
 		});
@@ -133,7 +133,7 @@ const { User } = require('../models');
 		 const updatedAlbum = await album.save(validData);
 		 debug("Updated photo successfully: %O", updatedAlbum);
  
-		 res.send({
+		 res.status(200).send({
 			 status: 'success',
 			 data: album
              });

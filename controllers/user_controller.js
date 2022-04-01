@@ -8,11 +8,9 @@ const models = require('../models');
 
 const getUser = async (req, res) => {
 	console.log("the user", req.user)
-	res.send({
+	res.status(200).send({
 		status: 'success',
-		data: {
-			user: req.user,
-		}
+		data: req.user
 	});
 }
 
@@ -45,11 +43,10 @@ const register = async (req, res) => {
 		const user = await new models.User(validData).save();
 		debug("New user created: %O", user);
 
-		res.send({
+		res.status(200).send({
 			status: 'success',
-			data: {
-				user,
-			}
+			data: user,
+
 		});
 
 	} catch (error) {
@@ -94,7 +91,7 @@ const update = async (req, res) => {
 		const updatedUser = await user.save(validData);
 		debug("Updated example successfully: %O", updatedUser);
 
-		res.send({
+		res.status(200).send({
 			status: 'success',
 			data: user,
 		});
